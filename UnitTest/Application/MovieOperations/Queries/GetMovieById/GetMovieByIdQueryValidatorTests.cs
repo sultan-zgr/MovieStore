@@ -1,0 +1,42 @@
+using MovieStore.Application.MovieOperations.Queries.GetMovieById;
+using FluentAssertions;
+using TestSetup;
+using Xunit;
+
+namespace Application.MovieOperations.Queries.GetMovieById
+{
+  public class GetMovieByIdQueryValidatorTests : IClassFixture<CommonTestFixture>
+  {
+    [Fact]
+    public void WhenNonPositiveIdIsGiven_Validator_ShouldReturnError()
+    {
+      // arrange
+      GetMovieByIdQuery query = new GetMovieByIdQuery(null, null);
+      query.Id = 0;
+
+      // act
+      GetMovieByIdQueryValidator validator = new GetMovieByIdQueryValidator();
+      var validationResult = validator.Validate(query);
+
+      // // assert
+      validationResult.Errors.Count.Should().BeGreaterThan(0);
+    }
+
+    [Fact]
+    public void WhenPositiveIdIsGiven_Validator_ShouldNotReturnError()
+    {
+      // arrange
+      GetMovieByIdQuery query = new GetMovieByIdQuery(null, null);
+      query.Id = 1;
+
+      // act
+      GetMovieByIdQueryValidator validator = new GetMovieByIdQueryValidator();
+      var validationResult = validator.Validate(query);
+
+      // // assert
+      validationResult.Errors.Count.Should().Be(0);
+    }
+
+  }
+
+}
